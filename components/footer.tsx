@@ -46,6 +46,7 @@ export default function Footer() {
 
             {/* Connect Button */}
             <motion.button
+              suppressHydrationWarning
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-bold uppercase text-sm tracking-wide hover:bg-gray-100 transition-colors duration-300 flex-shrink-0"

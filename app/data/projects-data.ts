@@ -1,0 +1,58 @@
+export const projects = [
+  {
+    title: "The Glass Tower",
+    category: "Architecture",
+    img: "salar_de_uyuni.jpg",
+    width: 400,
+    height: 500,
+  },
+  {
+    title: "Monochrome Edit",
+    category: "Fashion",
+    img: "cinque_terre.jpg",
+    width: 300,
+    height: 400,
+  },
+  {
+    title: "Terrain Genesis",
+    category: "3D Experience",
+    img: "antelope_canyon.jpg",
+    width: 500,
+    height: 350,
+  },
+  {
+    title: "Lumina",
+    category: "Creative Dev",
+    img: "bagan.jpg",
+    width: 350,
+    height: 450,
+  },
+  {
+    title: "Spatial Interface",
+    category: "Web Design",
+    img: "salar_de_uyuni.jpg",
+    width: 450,
+    height: 300,
+  },
+  {
+    title: "Velour Identity",
+    category: "Branding",
+    img: "cinque_terre.jpg",
+    width: 300,
+    height: 300,
+  },
+  {
+    title: "Neon Dreams",
+    category: "Digital Art",
+    img: "antelope_canyon.jpg",
+    width: 400,
+    height: 500,
+  },
+  {
+    title: "Fluid Forms",
+    category: "Motion Graphics",
+    img: "bagan.jpg",
+    width: 380,
+    height: 480,
+  },
+];

@@ -130,11 +130,11 @@ export default function Projects() {
 
                     {/* Links */}
                     <div className="flex gap-4">
-                      <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 text-sm">
+                      <button suppressHydrationWarning className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 text-sm">
                         <ExternalLink size={16} />
                         Live Demo
                       </button>
-                      <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 text-white font-medium rounded-lg hover:bg-white/5 transition-colors duration-300 text-sm">
+                      <button suppressHydrationWarning className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 text-white font-medium rounded-lg hover:bg-white/5 transition-colors duration-300 text-sm">
                         <Github size={16} />
                         Code
                       </button>

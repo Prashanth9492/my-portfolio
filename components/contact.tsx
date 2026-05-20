@@ -79,6 +79,7 @@ export default function Contact() {
                 <div>
                   <label className="block text-white font-medium mb-2">Name</label>
                   <input
+                    suppressHydrationWarning
                     type="text"
                     name="name"
                     value={formData.name}
@@ -92,6 +93,7 @@ export default function Contact() {
                 <div>
                   <label className="block text-white font-medium mb-2">Email</label>
                   <input
+                    suppressHydrationWarning
                     type="email"
                     name="email"
                     value={formData.email}
@@ -116,6 +118,7 @@ export default function Contact() {
                 </div>
 
                 <button
+                  suppressHydrationWarning
                   type="submit"
                   className="w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 flex items-center justify-center gap-2 group"
                 >

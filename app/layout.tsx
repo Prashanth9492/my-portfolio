@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import Navbar from '@/components/navbar'
 import './globals.css'
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -44,7 +45,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={_inter.variable}>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
+        <Navbar />
         {children}
         <Analytics />
       </body>
