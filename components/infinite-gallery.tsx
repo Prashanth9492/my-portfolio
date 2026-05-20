@@ -113,48 +113,52 @@ type CardLayout = {
 }
 
 function buildTileLayout(): { layouts: CardLayout[]; tileW: number; tileH: number } {
-  // We place 9 cards in 3 columns. Each column stacks vertically without rigid rows, 
-  // ensuring cards are tight "one above the other".
+  // We'll place 9 cards in a 3-column × 3-row structure.
+  // Each "slot" is placed at pre-computed offsets for varied sizes but aligned.
 
-  // Pattern: 3 columns, each containing one of each shape so total column heights are perfectly equal.
-  const COLS: { proj: number; type: keyof typeof CARD_SIZES }[][] = [
-    [{ proj: 0, type: 'landscape' }, { proj: 3, type: 'portrait' }, { proj: 6, type: 'square' }],
-    [{ proj: 1, type: 'portrait' }, { proj: 4, type: 'square' }, { proj: 7, type: 'landscape' }],
-    [{ proj: 2, type: 'square' }, { proj: 5, type: 'landscape' }, { proj: 8, type: 'portrait' }],
+  const ROW_HEIGHT = [CARD_SIZES.landscape.h, CARD_SIZES.portrait.h, CARD_SIZES.square.h]
+  const COL_WIDTH  = [CARD_SIZES.landscape.w, CARD_SIZES.portrait.w, CARD_SIZES.square.w]
+
+  // Pattern: 3x3 grid where each cell picks a card type
+  // (projectIndex, type)
+  const GRID: { proj: number; type: keyof typeof CARD_SIZES }[][] = [
+    [{ proj: 0, type: 'landscape' }, { proj: 1, type: 'portrait' }, { proj: 2, type: 'square' }],
+    [{ proj: 3, type: 'portrait'  }, { proj: 4, type: 'square'   }, { proj: 5, type: 'landscape' }],
+    [{ proj: 6, type: 'square'    }, { proj: 7, type: 'landscape'}, { proj: 8, type: 'portrait' }],
   ]
 
-  const layouts: CardLayout[] = []
-  let cx = 0
-  let tileH = 0
+  // Compute consistent column widths: use the max width in each column
+  const colWidths = [0, 1, 2].map(col =>
+    Math.max(...GRID.map(row => CARD_SIZES[row[col].type].w))
+  )
+  const rowHeights = GRID.map(row =>
+    Math.max(...row.map(cell => CARD_SIZES[cell.type].h))
+  )
 
-  for (let c = 0; c < COLS.length; c++) {
-    const col = COLS[c]
-    const colW = Math.max(...col.map(cell => CARD_SIZES[cell.type].w))
-    
-    // Add staggered masonry effect: middle column shifts down
-    const yOffset = c % 2 === 1 ? 120 : 0 
-    
-    let cy = yOffset
-    let baseH = 0
-    for (let r = 0; r < col.length; r++) {
-      const cell = col[r]
+  const layouts: CardLayout[] = []
+  let cy = 0
+  for (let r = 0; r < GRID.length; r++) {
+    let cx = 0
+    for (let c = 0; c < GRID[r].length; c++) {
+      const cell = GRID[r][c]
       const { w, h } = CARD_SIZES[cell.type]
-      
+      // center card within its slot
+      const slotW = colWidths[c]
+      const slotH = rowHeights[r]
       layouts.push({
         projectIndex: cell.proj,
-        x: cx + (colW - w) / 2,
-        y: cy,
+        x: cx + (slotW - w) / 2,
+        y: cy + (slotH - h) / 2,
         w,
         h,
       })
-      cy += h + GAP
-      baseH += h + GAP
+      cx += slotW + GAP
     }
-    cx += colW + GAP
-    tileH = Math.max(tileH, baseH)
+    cy += rowHeights[r] + GAP
   }
 
-  const tileW = cx
+  const tileW = colWidths.reduce((a, b) => a + b, 0) + GAP * (colWidths.length - 1) + GAP
+  const tileH = rowHeights.reduce((a, b) => a + b, 0) + GAP * (rowHeights.length - 1) + GAP
 
   return { layouts, tileW, tileH }
 }
@@ -179,10 +183,6 @@ export default function InfiniteGallery() {
   // smooth target wheel values
   const targetVelX = useRef(0)
   const targetVelY = useRef(0)
-
-  // Dragging state
-  const isDragging = useRef(false)
-  const dragStart = useRef({ x: 0, y: 0 })
 
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const [isMounted, setIsMounted] = useState(false)
@@ -273,59 +273,19 @@ export default function InfiniteGallery() {
 
     rafRef.current = requestAnimationFrame(animate)
 
-    const container = containerRef.current
-    if (!container) return
-
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       // Scale wheel delta to target velocity (positive scrolling = move camera)
       targetVelX.current += e.deltaX * 0.15
       targetVelY.current += e.deltaY * 0.15
     }
-
-    const onPointerDown = (e: PointerEvent) => {
-      isDragging.current = true
-      dragStart.current = { x: e.clientX, y: e.clientY }
-      container.style.cursor = 'grabbing'
-      container.setPointerCapture(e.pointerId)
-    }
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging.current) return
-      
-      const dx = dragStart.current.x - e.clientX
-      const dy = dragStart.current.y - e.clientY
-      
-      // Move camera directly for instant feeling
-      camX.current += dx
-      camY.current += dy
-      
-      // Feed velocity for momentum when released
-      targetVelX.current = dx * 1.5
-      targetVelY.current = dy * 1.5
-      
-      dragStart.current = { x: e.clientX, y: e.clientY }
-    }
-
-    const onPointerUp = (e: PointerEvent) => {
-      isDragging.current = false
-      container.style.cursor = 'grab'
-      container.releasePointerCapture(e.pointerId)
-    }
     
-    container.addEventListener('wheel', onWheel, { passive: false })
-    container.addEventListener('pointerdown', onPointerDown)
-    container.addEventListener('pointermove', onPointerMove)
-    container.addEventListener('pointerup', onPointerUp)
-    container.addEventListener('pointercancel', onPointerUp)
+    // Use passive: false to prevent default scrolling of body
+    window.addEventListener('wheel', onWheel, { passive: false })
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      container.removeEventListener('wheel', onWheel)
-      container.removeEventListener('pointerdown', onPointerDown)
-      container.removeEventListener('pointermove', onPointerMove)
-      container.removeEventListener('pointerup', onPointerUp)
-      container.removeEventListener('pointercancel', onPointerUp)
+      window.removeEventListener('wheel', onWheel)
     }
   }, [animate, tileW, tileH])
 
@@ -430,7 +390,7 @@ export default function InfiniteGallery() {
       <div className="gallery-hud-bottom">
         <div className="gallery-nav-hint">
           <span>↑</span><span>↓</span><span>←</span><span>→</span>
-          <span className="gallery-nav-hint-text">Drag or scroll anywhere</span>
+          <span className="gallery-nav-hint-text">Scroll anywhere</span>
         </div>
       </div>
 
@@ -443,7 +403,6 @@ export default function InfiniteGallery() {
           user-select: none;
           -webkit-user-select: none;
           touch-action: none;
-          cursor: grab;
         }
 
         /* Dot grid bg */
