@@ -95,7 +95,7 @@ const CARD_SIZES = {
   square:    { w: 320, h: 320 },
 }
 
-const GAP = 16 // gap between cards in px
+const GAP = 8 // gap between cards in px
 
 // ─── Build the repeating tile grid ───────────────────────────────────────────
 // We arrange all cards in a structured 3-row layout that tiles seamlessly.
