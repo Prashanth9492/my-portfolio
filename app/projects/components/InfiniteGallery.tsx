@@ -7,7 +7,7 @@ import {
   useSpring,
   useMotionValue,
 } from "framer-motion";
-import { projects } from "../data/projects-data";
+import { projects } from "../../data/projects-data";
 import ProjectCard from "./ProjectCard";
 
 const InfiniteGallery = () => {

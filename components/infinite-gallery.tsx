@@ -387,12 +387,12 @@ export default function InfiniteGallery() {
         <div className="gallery-hint">Scroll to explore · {PROJECTS.length} projects</div>
       </div>
 
-      <div className="gallery-hud-bottom">
+      {/* <div className="gallery-hud-bottom">
         <div className="gallery-nav-hint">
           <span>↑</span><span>↓</span><span>←</span><span>→</span>
           <span className="gallery-nav-hint-text">Scroll anywhere</span>
         </div>
-      </div>
+      </div> */}
 
       <style>{`
         .infinite-gallery-container {

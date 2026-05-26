@@ -66,6 +66,7 @@ export default function Navbar() {
 
   const navItems = [
     { label: 'RESUME', href: '/resume' },
+    { label: 'SKILLS', href: '/skills' },
     { label: 'ABOUT', href: '/about' },
     { label: 'PLAYGROUND', href: '/playground' },
   ]
