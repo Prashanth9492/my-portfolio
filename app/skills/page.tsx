@@ -28,9 +28,12 @@ const textures = typeof window !== 'undefined' ? imageUrls.map((url) => textureL
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
 
-const spheres = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
-}));
+// Create one sphere per texture so each skill appears only once
+const spheres = typeof window !== 'undefined'
+  ? textures.map(() => ({
+      scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+    }))
+  : [];
 
 type SphereProps = {
   vec?: THREE.Vector3;
@@ -148,7 +151,7 @@ export default function SkillsPage() {
           clearcoat: 0.1,
         })
     );
-  }, []);
+  }, [textures]);
 
   return (
     <div className="techstack min-h-screen pt-24 px-4 w-full h-[80vh]">
@@ -177,7 +180,7 @@ export default function SkillsPage() {
             <SphereGeo
               key={i}
               {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              material={materials[i % materials.length]}
               isActive={isActive}
             />
           ))}
