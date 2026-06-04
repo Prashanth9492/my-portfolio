@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function page() {
   return (
-    <main>
+    <main className="min-h-screen bg-black text-white">
       <InfiniteGallery />
     </main>
   )

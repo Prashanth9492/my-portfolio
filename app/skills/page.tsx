@@ -21,8 +21,18 @@ const imageUrls = [
   "/images/express.webp",
   "/images/mongo.webp",
   "/images/mysql.webp",
-  "/images/typescript.webp",
+  "/images/typescript.png",
   "/images/javascript.webp",
+  "/images/css.png",
+  "/images/html.png",
+  "/images/java.png",
+  "/images/firebase.png",
+  "/images/git.png",
+  "/images/github.png",
+  "/images/curser.png",
+  "/images/net.png",
+  "/images/vercel.png",
+  "/images/render.png",
 ];
 const textures = typeof window !== 'undefined' ? imageUrls.map((url) => textureLoader.load(url)) : [];
 
@@ -154,15 +164,15 @@ export default function SkillsPage() {
   }, [textures]);
 
   return (
-    <div className="techstack min-h-screen pt-24 px-4 w-full h-[80vh]">
-      <h2 className="text-3xl font-bold mb-8 text-center" style={{fontFamily: '"Courier New", Courier, monospace', zIndex: 10, position: 'relative'}}>MY TECHSTACK</h2>
+    <div className="techstack relative min-h-screen pt-0 px-4 w-full h-[80vh]">
+      <h2 className="text-4xl font-bold text-center absolute top-15 left-1/2 transform -translate-x-1/2 z-50" style={{fontFamily: '"Courier New", Courier, monospace'}}>MY TECHSTACK</h2>
 
       <Canvas
         shadows
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas w-full h-full"
+        className="tech-canvas absolute inset-0 w-full h-full z-0"
       >
         <ambientLight intensity={1} />
         <spotLight

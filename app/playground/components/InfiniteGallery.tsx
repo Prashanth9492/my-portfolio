@@ -5,11 +5,11 @@ import { projects } from "../data/gallery-data";
 import Card from "./Card";
 
 const InfiniteGallery = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const pos = useRef({ x: 0, y: 0, prevX: 0, prevY: 0 });
-  const vel = useRef({ x: 0, y: 0 });
-  const animationFrameId = useRef(null);
+  const pos = useRef<{ x: number; y: number; prevX: number; prevY: number }>({ x: 0, y: 0, prevX: 0, prevY: 0 });
+  const vel = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const animationFrameId = useRef<number | null>(null);
 
   const gridConfig = {
     columns: 4,
@@ -22,7 +22,7 @@ const InfiniteGallery = () => {
   const numRows = Math.ceil(projects.length / gridConfig.columns);
   const canvasHeight = numRows * (gridConfig.cardHeight + gridConfig.gap);
 
-  const getPosition = (i) => {
+  const getPosition = (i: number) => {
     const col = i % gridConfig.columns;
     const row = Math.floor(i / gridConfig.columns);
     return {
@@ -31,15 +31,15 @@ const InfiniteGallery = () => {
     };
   };
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: PointerEvent) => {
     setIsDragging(true);
     pos.current.prevX = e.clientX;
     pos.current.prevY = e.clientY;
-    cancelAnimationFrame(animationFrameId.current);
-    containerRef.current.style.cursor = "grabbing";
+    if (animationFrameId.current !== null) cancelAnimationFrame(animationFrameId.current);
+    if (containerRef.current) containerRef.current.style.cursor = "grabbing";
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: PointerEvent) => {
     if (!isDragging) return;
     const deltaX = e.clientX - pos.current.prevX;
     const deltaY = e.clientY - pos.current.prevY;
@@ -58,7 +58,7 @@ const InfiniteGallery = () => {
 
   const handlePointerUp = () => {
     setIsDragging(false);
-    containerRef.current.style.cursor = "grab";
+    if (containerRef.current) containerRef.current.style.cursor = "grab";
     animateMomentum();
   };
 
@@ -66,7 +66,8 @@ const InfiniteGallery = () => {
     const x = pos.current.x % canvasWidth;
     const y = pos.current.y % canvasHeight;
 
-    const gallery = containerRef.current.firstChild;
+    const gallery = containerRef.current?.firstChild as HTMLElement | null;
+    if (!gallery) return;
     gallery.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
 
@@ -89,17 +90,19 @@ const InfiniteGallery = () => {
 
   useEffect(() => {
     const container = containerRef.current;
+    if (!container) return;
     container.addEventListener("pointerdown", handlePointerDown);
     container.addEventListener("pointermove", handlePointerMove);
     container.addEventListener("pointerup", handlePointerUp);
     container.addEventListener("pointerleave", handlePointerUp);
 
     return () => {
+      if (!container) return;
       container.removeEventListener("pointerdown", handlePointerDown);
       container.removeEventListener("pointermove", handlePointerMove);
       container.removeEventListener("pointerup", handlePointerUp);
       container.removeEventListener("pointerleave", handlePointerUp);
-      cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current !== null) cancelAnimationFrame(animationFrameId.current);
     };
   }, [isDragging]);
 
@@ -108,7 +111,7 @@ const InfiniteGallery = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 cursor-grab overflow-hidden bg-gray-50"
+      className="fixed inset-0 cursor-grab overflow-hidden bg-black text-white"
       style={{ touchAction: "none" }}
     >
       <div

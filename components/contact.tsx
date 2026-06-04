@@ -1,13 +1,32 @@
-'use client'
+ 'use client'
+ import React, { useState } from 'react'
 
 export default function Contact() {
+  const [isDriving, setIsDriving] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    // trigger driving animation
+    setIsDriving(true)
+    // after animation completes, stop driving and show success toast
+    window.setTimeout(() => {
+      setIsDriving(false)
+      setShowToast(true)
+      // auto-hide toast
+      window.setTimeout(() => setShowToast(false), 2200)
+    }, 1400)
+  }
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
 
         .cl-wrap {
-          background: #EAE6DC;
+          background:
+            radial-gradient(circle at 16% 18%, rgba(99,102,241,0.12), transparent 18%),
+            radial-gradient(circle at 88% 82%, rgba(16,185,129,0.06), transparent 20%),
+            #000;
           min-height: 100vh;
           width: 100%;
           position: relative;
@@ -16,6 +35,39 @@ export default function Contact() {
           box-sizing: border-box;
           overflow: hidden;
           padding-bottom: 40px;
+          color: #fff;
+        }
+
+        /* Decorative animated blobs */
+        .accent-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(48px);
+          pointer-events: none;
+          mix-blend-mode: screen;
+          opacity: 0.9;
+          transform: translate3d(0,0,0);
+          animation: float 8s ease-in-out infinite;
+        }
+        .blob-1 {
+          width: 360px;
+          height: 360px;
+          left: -80px;
+          top: -40px;
+          background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.78), rgba(99,102,241,0.28) 40%, transparent 70%);
+        }
+        .blob-2 {
+          width: 420px;
+          height: 420px;
+          right: -120px;
+          bottom: -80px;
+          background: radial-gradient(circle at 70% 70%, rgba(16,185,129,0.7), rgba(16,185,129,0.22) 40%, transparent 70%);
+          animation-delay: 2s;
+        }
+        @keyframes float {
+          0% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(22px) translateX(6px); }
+          100% { transform: translateY(0) translateX(0); }
         }
 
         /* NAV */
@@ -32,13 +84,13 @@ export default function Contact() {
           letter-spacing: 0.12em;
           text-transform: uppercase;
           line-height: 1.1;
-          color: #121212;
+          color: #fff;
         }
         .cl-circle-btn {
           width: 48px;
           height: 48px;
           border-radius: 50%;
-          border: 1px solid #c5c1b5;
+          border: 1px solid rgba(255,255,255,0.12);
           background: transparent;
           cursor: pointer;
           display: flex;
@@ -55,7 +107,7 @@ export default function Contact() {
           display: block;
           width: 14px;
           height: 1px;
-          background-color: #121212;
+          background-color: #fff;
         }
 
         /* BODY */
@@ -77,19 +129,23 @@ export default function Contact() {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          padding-left: 20px;
+          padding-left: 60px;
         }
 
         .cl-h1 {
           font-family: 'Playfair Display', Georgia, serif;
           font-weight: 400;
           font-style: normal;
-          font-size: clamp(56px, 6.8vw, 92px);
+          font-size: clamp(70px, 7.8vw, 100px);
           line-height: 0.95;
           letter-spacing: -0.01em;
-          color: #121212;
           margin: 0;
           text-align: left;
+          background: linear-gradient(90deg, #ffffff 0%, #bde0ff 48%, #9ef6e0 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          text-shadow: 0 6px 18px rgba(0,0,0,0.6);
         }
         
         .cl-h1 .bold {
@@ -113,7 +169,7 @@ export default function Contact() {
           font-family: 'Playfair Display', serif;
           font-size: clamp(20px, 2vw, 26px);
           font-style: normal;
-          color: #121212;
+          color: #dcdcdc;
           display: flex;
           align-items: baseline;
           gap: 16px;
@@ -124,7 +180,7 @@ export default function Contact() {
           font-family: 'EB Garamond', serif;
           font-style: normal;
           font-size: clamp(16px, 1.3vw, 20px);
-          color: #121212;
+          color: #f3f3f3;
         }
 
         /* RIGHT COLUMN */
@@ -134,24 +190,36 @@ export default function Contact() {
           gap: 56px;
           padding-right: 40px;
           max-width: 440px;
+          // background: rgba(255,255,255,0.02);
+          border-radius: 14px;
+          padding: 28px;
+          backdrop-filter: blur(6px);
         }
 
         /* Email Section */
         .cl-email-container {
-          border-bottom: 1px solid #121212;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
           padding-bottom: 8px;
           width: fit-content;
         }
         .cl-email {
           font-family: 'EB Garamond', serif;
-          font-size: clamp(22px, 2.2vw, 32px);
-          font-weight: 400;
-          color: #121212;
+          font-size: clamp(18px, 1.8vw, 22px);
+          font-weight: 700;
           text-decoration: none;
           letter-spacing: 0.01em;
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 18px;
+          border-radius: 10px;
+          background: linear-gradient(10deg, rgb(156, 158, 254), rgba(16,185,129,1));
+          color: #07121a;
+          // box-shadow: 0 8px 40px rgba(16,185,129,0.08);
         }
         .cl-email:hover { 
-          opacity: 0.6; 
+          transform: translateY(-2px);
+          transition: transform 0.18s ease;
         }
 
         /* Socials Grid */
@@ -167,11 +235,13 @@ export default function Contact() {
           gap: 10px;
           font-family: 'EB Garamond', serif;
           font-size: 16px;
-          color: #121212;
+          color: #e6e6e6;
           text-decoration: none;
         }
         .cl-soc:hover { 
-          opacity: 0.6; 
+          opacity: 0.85; 
+          transform: translateX(4px);
+          transition: transform 0.18s ease, opacity 0.18s ease;
         }
         .cl-soc svg { 
           width: 16px; 
@@ -189,12 +259,12 @@ export default function Contact() {
           font-family: 'Playfair Display', serif;
           font-size: 26px;
           font-style: normal;
-          color: #121212;
+          color: #fff;
           margin-bottom: 24px;
         }
         .cl-nl-line {
           position: relative;
-          border-bottom: 1px solid #a6a297;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.24);
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -207,27 +277,35 @@ export default function Contact() {
           font-family: 'EB Garamond', serif;
           font-style: italic;
           font-size: 16px;
-          color: #121212;
+          color: #fff;
           padding: 0;
           width: 100%;
         }
         .cl-nl-input::placeholder { 
-          color: #8c877e; 
+          color: rgb(255, 255, 255); 
           font-style: italic;
         }
         .cl-nl-arrow {
-          background: none;
+          background: linear-gradient(90deg, rgba(141, 142, 244, 0.95), rgba(108, 253, 205, 0.95));
           border: none;
           cursor: pointer;
-          padding: 0 0 0 10px;
-          color: #121212;
-          font-size: 24px;
+          padding: 8px 12px;
+          color: #07121a;
+          font-size: 18px;
           line-height: 1;
           font-family: 'EB Garamond', serif;
-          transition: transform 0.2s ease;
+          border-radius: 8px;
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+          will-change: transform;
         }
         .cl-nl-arrow:hover { 
-          transform: translateX(4px); 
+          transform: translateX(6px);
+          box-shadow: 0 10px 30px rgba(16,185,129,0.08);
+        }
+        .cl-nl-arrow.driving {
+          transform: translateX(260px) rotate(6deg);
+          transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+          box-shadow: 0 22px 48px rgba(16,185,129,0.12);
         }
 
         /* Ambient Vector Wave */
@@ -235,7 +313,7 @@ export default function Contact() {
           position: absolute;
           bottom: 40px;
           right: 60px;
-          opacity: 0.8;
+          opacity: 0.9;
         }
 
         @media (max-width: 900px) {
@@ -253,20 +331,62 @@ export default function Contact() {
           .cl-wave {
             display: none;
           }
+          .cl-toast { right: 20px; bottom: 20px; }
+        }
+        /* Toast */
+        .cl-toast {
+          position: fixed;
+          right: 40px;
+          bottom: 40px;
+          background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+          color: #e9fef6;
+          padding: 12px 16px;
+          border-radius: 12px;
+          backdrop-filter: blur(6px);
+          box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+          opacity: 0;
+          transform: translateY(8px) scale(0.995);
+          transition: opacity 260ms cubic-bezier(.2,.9,.2,1), transform 260ms cubic-bezier(.2,.9,.2,1);
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          pointer-events: none;
+        }
+        .cl-toast.show {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          pointer-events: auto;
+        }
+        .cl-toast .icon {
+          width: 36px;
+          height: 36px;
+          display: grid;
+          place-items: center;
+          background: rgba(16,185,129,0.12);
+          border-radius: 8px;
+          color: #9ef6e0;
+          font-weight: 700;
+        }
+        .cl-toast .msg {
+          font-family: 'EB Garamond', serif;
+          font-size: 14px;
+          color: #e6fff8;
         }
       `}</style>
 
       <div className="cl-wrap">
+        <div className="accent-blob blob-1" aria-hidden></div>
+        <div className="accent-blob blob-2" aria-hidden></div>
 
         {/* TOP BAR NAVIGATION */}
         <nav className="cl-nav">
           <div className="cl-logo">
             CHIARA<br/>LUZZANA
           </div>
-          <button className="cl-circle-btn" aria-label="Open Navigation Menu">
+          {/* <button className="cl-circle-btn" aria-label="Open Navigation Menu">
             <span></span>
             <span></span>
-          </button>
+          </button> */}
         </nav>
 
         {/* HERO CONTENT AREA */}
@@ -290,8 +410,8 @@ export default function Contact() {
 
             {/* Main Email Block */}
             <div className="cl-email-container">
-              <a href="mailto:info@chiaraluzzana.com" className="cl-email">
-                info@chiaraluzzana.com
+              <a href="mailto:ponamandiprashanth00@gmail.com" className="cl-email">
+                ponamandiprashnath00@gmail.com
               </a>
             </div>
 
@@ -317,7 +437,7 @@ export default function Contact() {
 
             {/* Newsletter Subscription Block */}
             <div className="cl-newsletter-box">
-              <div className="cl-nl-title">Newsletter</div>
+              <div className="cl-nl-title">Message</div>
               <div className="cl-nl-line">
                 <input 
                   className="cl-nl-input" 
@@ -325,7 +445,7 @@ export default function Contact() {
                   placeholder="Email Address" 
                   aria-label="Email Address Collection" 
                 />
-                <button className="cl-nl-arrow" aria-label="Submit Email Address">→</button>
+                <button type="button" onClick={handleSubmit} className={`cl-nl-arrow ${isDriving ? 'driving' : ''}`} aria-label="Submit Email Address">→</button>
               </div>
             </div>
 
@@ -335,9 +455,18 @@ export default function Contact() {
         {/* Ambient Wave Vector Art */}
         <svg className="cl-wave" width="84" height="38" viewBox="0 0 72 32" fill="none">
           <path d="M2 16 C9 4 18 4 25 16 C32 28 42 28 50 16 C58 4 66 10 70 16"
-            stroke="#121212" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
+            stroke="rgba(24, 23, 23, 0.16)" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
         </svg>
 
+      </div>
+
+      {/* Success Toast */}
+      <div className={`cl-toast ${showToast ? 'show' : ''}`} role="status" aria-live="polite">
+        <div className="icon">✓</div>
+        <div className="msg">
+          <div style={{fontWeight:700}}>Submitted</div>
+          <div style={{fontSize:12, opacity:0.9}}>Thanks — we'll be in touch shortly.</div>
+        </div>
       </div>
     </>
   )

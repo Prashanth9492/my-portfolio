@@ -399,7 +399,8 @@ export default function InfiniteGallery() {
           position: fixed;
           inset: 0;
           overflow: hidden;
-          background: #f0ede8;
+          background: #000;
+          color: #fff;
           user-select: none;
           -webkit-user-select: none;
           touch-action: none;
@@ -409,9 +410,9 @@ export default function InfiniteGallery() {
         .gallery-bg-dots {
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(circle, #c5b8a8 1px, transparent 1px);
+          background-image: radial-gradient(circle, rgb(247, 242, 242) 1px, transparent 2px);
           background-size: 28px 28px;
-          opacity: 0.55;
+          opacity: 0.16;
           pointer-events: none;
           z-index: 0;
         }
@@ -429,11 +430,10 @@ export default function InfiniteGallery() {
         .gallery-card {
           border-radius: 16px;
           overflow: hidden;
-          background: #fff;
+          background: #0b0b0b;
           box-shadow:
-            0 1px 2px rgba(0,0,0,0.05),
-            0 4px 16px rgba(0,0,0,0.07),
-            0 12px 40px rgba(0,0,0,0.08);
+            0 4px 18px rgba(0,0,0,0.6),
+            0 12px 40px rgba(0,0,0,0.7);
           transform: perspective(1200px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
           transition:
             transform 0.2s cubic-bezier(0.2, 0, 0, 1),
@@ -447,7 +447,7 @@ export default function InfiniteGallery() {
         .gallery-card.card-hovered {
           transform: perspective(1200px) scale(1.04) translateY(-4px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
           box-shadow:
-            0 2px 4px rgba(0,0,0,0.06),
+            0 2px 4px rgba(164, 161, 161, 0.48),
             0 8px 24px rgba(0,0,0,0.12),
             0 32px 70px rgba(0,0,0,0.18),
             0 0 0 1.5px var(--accent, #6366f1);
@@ -656,7 +656,7 @@ export default function InfiniteGallery() {
           align-items: center;
           justify-content: space-between;
           z-index: 100;
-          background: linear-gradient(to bottom, rgba(240,237,232,0.9) 0%, transparent 100%);
+          background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%);
           pointer-events: none;
         }
 
@@ -668,14 +668,15 @@ export default function InfiniteGallery() {
           font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: #2d2926;
+          color: #fff;
         }
 
         .gallery-label-dot {
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background: #6366f1;
+          background: var(--accent, #6366f1);
+          box-shadow: 0 0 10px rgba(99,102,241,0.5);
           animation: pulse-dot 2.4s ease-in-out infinite;
         }
 
@@ -686,7 +687,7 @@ export default function InfiniteGallery() {
 
         .gallery-hint {
           font-size: 12px;
-          color: #9a8f83;
+          color: #bfbfbf;
           letter-spacing: 0.04em;
         }
 
